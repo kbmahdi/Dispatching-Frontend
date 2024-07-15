@@ -1,0 +1,308 @@
+<p-tabView>
+  <p-tabPanel header="Etat stock et vente">
+    <div class="card" style="background-color: #d6d9dc">
+      <div class="card">
+        <h1 style="color: #1c1c1c;">#Etat Stock et vente</h1>
+        <div class="grid p-fluid mt-3">
+          <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+              <p-calendar inputId="calendar" [(ngModel)]="value5" selectionMode="range"></p-calendar>
+              <label >Date</label>
+            </span>
+          </div>
+          <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+              <p-multiSelect inputId="multiselect" [options]="canal" [(ngModel)]="selectedCanal" optionLabel="name" [filter]="false" (onChange)="onSelectionChange($event)" ></p-multiSelect>
+              <label>Canal</label>
+            </span>
+          </div>
+          <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+              <p-multiSelect inputId="multiselect" [options]="store" [(ngModel)]="selectedStore" optionLabel="name" [filter]="false" (onChange)="onSelectionChange($event)"></p-multiSelect>
+              <label>Store</label>
+            </span>
+          </div>
+          <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+              <p-multiSelect inputId="multiselect" [options]="categorie" [(ngModel)]="selectedCategorie" optionLabel="name" [filter]="false" (onChange)="onSelectionChange($event)"></p-multiSelect>
+              <label>Categorie</label>
+            </span>
+          </div>
+          <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+              <p-multiSelect inputId="multiselect" [options]="sousCat" [(ngModel)]="selectedSousCat" optionLabel="name" [filter]="false" (onChange)="onSelectionChange($event)"></p-multiSelect>
+              <label>Sous_Categorie</label>
+            </span>
+          </div>
+          <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+              <p-multiSelect inputId="multiselect" [options]="nomArticle" [(ngModel)]="selectedNomArticle" optionLabel="name" [filter]="false" (onChange)="onSelectionChange($event)"></p-multiSelect>
+              <label>Nom article</label>
+            </span>
+          </div>
+          <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+              <p-multiSelect inputId="multiselect" [options]="newRework" [(ngModel)]="selectedNewRework" optionLabel="name" [filter]="false" (onChange)="onSelectionChange($event)"></p-multiSelect>
+              <label>New|Rework</label>
+            </span>
+          </div>
+        </div>
+        <div class="grid p-fluid mt-3">
+          <div class="field col-12 md:col-4" style="padding-top: 48px">
+            <span class="p-float-label">
+              <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="dates" [(ngModel)]="value10" optionLabel="name" (onChange)="sendComboboxData($event)"></p-dropdown>
+              <label>Calendrier</label>
+            </span>
+          </div>
+          <div class="field col-12 md:col-5" style="padding-left: 20px">
+            <h5 style="padding-left: 140px">Couverture stock souhaitée</h5>
+            <p-inputNumber mode="decimal" [showButtons]="true" [min]="0" [max]="99999999999" [style]="{'height':'40px'}" [(ngModel)]="desiredStockCoverage" (onInput)="updateStockCoverage($event)"></p-inputNumber>
+          </div>
+          <div class="col-12 md:col-3" style="padding-top: 35px">
+            <div class="card" style="background-color: #ebf9f3">
+              <h6 style="padding-left: 20px">Nombre de jours hors dimanche:</h6>
+              <h3 style="padding-left: 100px">{{ metrics.weekdays_without_sundays }}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <h3 style="color: #ff6600;">Etat Stock et vente</h3>
+          <p-table [value]="[metrics]" dataKey="name" [expandedRowKeys]="expandedRows" styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+              <tr>
+                <th style="width: 3rem"></th>
+                <th pSortableColumn="boutique" style="background-color: #232b2b; color: #ffffff; width: 96px">Boutique</th>
+                <th pSortableColumn="instock" style="background-color: #232b2b; color: #ffffff; width: 50px">Instock</th>
+                <th pSortableColumn="delivre" style="background-color: #232b2b; color: #ffffff; width: 50px">Delivré</th>
+                <th pSortableColumn="disponible" style="background-color: #232b2b; color: #ffffff; width: 50px">Stock disponible</th>
+                <th pSortableColumn="commande" style="background-color: #232b2b; color: #ffffff; width: 50px">Commande en cours</th>
+                <th pSortableColumn="vente" style="background-color: #232b2b; color: #ffffff; width: 50px">Vente</th>
+                <th pSortableColumn="rythmeVente" style="background-color: #232b2b; color: #ffffff; width: 50px">Rythme de vente</th>
+                <th pSortableColumn="remplacement" style="background-color: #232b2b; color: #ffffff; width: 50px">Remplacement</th>
+                <th pSortableColumn="rythmeRemplacement" style="background-color: #232b2b; color: #ffffff; width: 50px">Rythme de remplacement</th>
+                <th pSortableColumn="destockage" style="background-color: #232b2b; color: #ffffff; width: 50px">Destockage</th>
+                <th pSortableColumn="ryhtmeDestockage" style="background-color: #232b2b; color: #ffffff; width: 50px">Rythme de destockage</th>
+                <th pSortableColumn="couverture" style="background-color: #232b2b; color: #ffffff; width: 50px">Couverture (nbr jours)</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-metrics let-expanded="expanded">
+              <tr>
+                <td>
+                  <button type="button" pButton pRipple [pRowToggler]="metrics" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                </td>
+                <td>Total</td>
+                <td>{{metrics.instock}}</td>
+                <td>{{metrics.delivre}}</td>
+                <td>{{metrics.stockDisponible}}</td>
+                <td>{{metrics['Commande en cours']}}</td>
+                <td>{{metrics.vente}}</td>
+                <td>{{metrics['rythme de vente']}}</td>
+                <td>{{metrics.remplacement}}</td>
+                <td>{{metrics['rythme de remplacement']}}</td>
+                <td>{{metrics.destockage}}</td>
+                <td>{{metrics['rythme de destockage']}}</td>
+                <td>{{metrics.couverture}}</td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion">
+              <tr>
+                <td colspan="13" style="padding-left: 54px ; padding-top: -40px">
+                  <div class="p-3">
+                    <p-table [value]="indivMetrics | keyvalue" dataKey="key" responsiveLayout="scroll" styleClass="p-datatable-striped" selectionMode="multiple">
+                      <ng-template pTemplate="header">
+                        <tr>
+                          <th style="width: 50px"><p-tableHeaderCheckbox /></th>
+                          <th style="width: 50px">Boutique</th>
+                          <th style="width: 50px">Instock</th>
+                          <th style="width: 50px">Delivré</th>
+                          <th style="width: 50px">Stock disponible</th>
+                          <th style="width: 50px">Commande en cours</th>
+                          <th style="width: 50px">Vente</th>
+                          <th style="width: 50px">Rythme de vente</th>
+                          <th style="width: 50px">Remplacement</th>
+                          <th style="width: 50px">Rythme de remplacement</th>
+                          <th style="width: 50px">Destockage</th>
+                          <th style="width: 50px">Rythme de destockage</th>
+                          <th style="width: 50px">Couverture (nbr jours)</th>
+                        </tr>
+                      </ng-template>
+                      <ng-template pTemplate="body" let-item>
+                        <tr [pSelectableRow]="item">
+                          <td>
+                            <p-checkbox [value]="item.key" [(ngModel)]="selectedStores" (click)="onItemChecked(item)" type="checkbox">{{item.label}}></p-checkbox>
+                          </td>
+                          <td>{{item.key}}</td>
+                          <td>{{item.value.instock}}</td>
+                          <td>{{item.value.delivre}}</td>
+                          <td>{{item.value.stockDisponible}}</td>
+                          <td>{{item.value['Commande en cours']}}</td>
+                          <td>{{item.value.vente}}</td>
+                          <td>{{item.value['rythme de vente']}}</td>
+                          <td>{{item.value.remplacement}}</td>
+                          <td>{{item.value['rythme de remplacement']}}</td>
+                          <td>{{item.value.destockage}}</td>
+                          <td>{{item.value['rythme de destockage']}}</td>
+                          <td>{{item.value.couverture}}</td>
+                        </tr>
+                      </ng-template>
+                    </p-table>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+        <div class="card">
+          <h3 style="color: #ff6600;">Besoins</h3>
+          <p-table #dt1 [value]="currentStoreData" dataKey="id" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+              <tr>
+                <th style="background-color: #232b2b; color: #ffffff;">
+                  <div class="flex justify-content-between align-items-center">
+                    Boutique
+                  </div>
+                </th>
+                <th style="background-color: #232b2b; color: #ffffff;">
+                  <div class="flex justify-content-between align-items-center">
+                    Vente sur la période souhaitée
+                  </div>
+                </th>
+                <th style="background-color: #232b2b; color: #ffffff;">
+                  <div class="flex justify-content-between align-items-center">
+                    Besoin en stock New
+                  </div>
+                </th>
+                <th style="background-color: #232b2b; color: #ffffff;">
+                  <div class="flex justify-content-between align-items-center">
+                    Besoin New souhaité (input)
+                  </div>
+                </th>
+                <th style="background-color: #232b2b; color: #ffffff;">
+                  <div class="flex justify-content-between align-items-center">
+                    Remplacement sur la période souhaitée
+                  </div>
+                </th>
+                <th style="background-color: #232b2b; color: #ffffff;">
+                  <div class="flex justify-content-between align-items-center">
+                    Besoin en stock Rework
+                  </div>
+                </th>
+                <th style="background-color: #232b2b; color: #ffffff;">
+                  <div class="flex justify-content-between align-items-center">
+                    Besoin Rework souhaité (input)
+                  </div>
+                </th>
+                <th style="background-color: #232b2b; color: #ffffff;">
+                  <div class="flex justify-content-between align-items-center">
+                    Test
+                  </div>
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-currentStoreData let-editing="editing">
+              <tr>
+                <td style="min-width: 12rem;">
+                  {{ currentStoreData.store_name }}
+                </td>
+                <td style="min-width: 12rem;">
+                  {{ currentStoreData.VentePS }}
+                </td>
+                <td style="min-width: 10rem;" [ngStyle]="{'background-color': currentStoreData.BesoinNew >= 0 ? (currentStoreData.BesoinNew == 0 ? '#ffffff' : '#b3c88c') : '#ce414f'}">
+                  {{ currentStoreData.BesoinNew }}
+                </td>
+                <td [pEditableColumn]="currentStoreData.BesoinNewSouhaite" pEditableColumnField="code">
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input
+                        pInputText
+                        type="text"
+                        [(ngModel)]="currentStoreData.BesoinNewSouhaite" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{ currentStoreData.BesoinNewSouhaite }}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td style="min-width: 14rem;">
+                  {{ currentStoreData.RemplacementPS }}
+                </td>
+                <td style="min-width: 10rem;" [ngStyle]="{'background-color': currentStoreData.BesoinRework >= 0 ? (currentStoreData.BesoinRework == 0 ? '#dece72' : '#dece72') : '#dece72'}">
+                  {{ currentStoreData.BesoinRework }}
+                </td>
+                <td [pEditableColumn]="currentStoreData.BesoinReworkSouhaite" pEditableColumnField="code">
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input
+                        pInputText
+                        type="text"
+                        [(ngModel)]="currentStoreData.BesoinReworkSouhaite" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{ currentStoreData.BesoinReworkSouhaite }}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td style="min-width: 10rem;">
+                  <p-button label="Valider" styleClass="p-button-link mr-2 mb-2" (click)="onValidateClick()"></p-button>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="7">No stores selected.</td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="loadingbody">
+              <tr>
+                <td colspan="7">Loading stores data. Please wait.</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+  </p-tabPanel>
+  <p-tabPanel header="Dispatching">
+    <div class="card" style="background-color: white;">
+      <h1 style="color: #1c1c1c;">#Dispatching</h1>
+      <div class="grid p-fluid mt-2">
+        <div class="col-12 md:col-2" style="padding-top: 35px">
+          <div class="card" style="background-color: #ebf9f3">
+            <h6 style="padding-left: 20px">Stock New:</h6>
+          </div>
+        </div>
+        <div class="col-12 md:col-2" style="padding-top: 35px">
+          <div class="card" style="background-color: #ebf9f3">
+            <h6 style="padding-left: 20px">Stock Rework:</h6>
+          </div>
+        </div>
+      </div>
+      <div style="padding-top: 20px">
+        <p-table dataKey="name" [expandedRowKeys]="expandedRows" styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="boutique" style="background-color: #232b2b; color: #ffffff; width: auto">Boutique</th>
+              <th pSortableColumn="Besoin New" style="background-color: #232b2b; color: #ffffff; width: auto">Besoin New</th>
+              <th pSortableColumn="Besoin New souhaité" style="background-color: #232b2b; color: #ffffff; width: auto">Besoin New souhaité</th>
+              <th pSortableColumn="Besoin Rework" style="background-color: #232b2b; color: #ffffff; width: auto">Besoin Rework</th>
+              <th pSortableColumn="Besoin Rework souhaité" style="background-color: #232b2b; color: #ffffff; width: auto">Besoin Rework souhaité</th>
+              <th pSortableColumn="Action" style="background-color: #232b2b; color: #ffffff; width: auto">Action</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body">
+            <tr *ngFor="let item of displayStoreData">
+              <td>{{ item.store_name }}</td>
+              <td>{{ item.BesoinNew }}</td>
+              <td>{{ item.BesoinNewSouhaite }}</td>
+              <td>{{ item.BesoinRework }}</td>
+              <td>{{ item.BesoinReworkSouhaite }}</td>
+              <td style="min-width: 10rem;">
+                <p-button label="Dispatch" styleClass="p-button-link mr-2 mb-2"></p-button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-tabPanel>
+</p-tabView>
